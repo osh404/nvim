@@ -6,16 +6,23 @@ local opt = { noremap = true, silent = true }
 vim.keymap.set("i", "<C-a>", "<ESC>I", opt) -- 移动到行首
 vim.keymap.set("i", "<C-e>", "<ESC>A", opt) -- 移动到行尾
 vim.keymap.set("i", "<C-n>", "<Down>", opt) -- 移动到下一行
-vim.keymap.set("i", "<C-p>", "<Up>", opt) -- 移动到上一行
-vim.keymap.set("i", "<C-b>", "<Left>", opt) -- 左移
-vim.keymap.set("i", "<C-f>", "<Right>", opt) -- 右移
+vim.keymap.set("i", "<C-p>", "<Up>", opt)   -- 移动到上一行
+-- vim.keymap.set("i", "<C-b>", "<Left>", opt)  -- 左移
+-- vim.keymap.set("i", "<C-f>", "<Right>", opt) -- 右移
+-- 修改成延迟执行，避免键位冲突
+vim.defer_fn(function()
+  local opt = { noremap = true, silent = true }
+  vim.keymap.set("i", "<C-b>", "<Left>", opt)
+  vim.keymap.set("i", "<C-f>", "<Right>", opt)
+end, 100) -- 延迟 100 毫秒执行
+
 
 -- <C-h> 删除光标后的字符 自带了
-vim.keymap.set("i", "<C-d>", "<Del>", opt) -- 删除光标后字符
--- vim.keymap.set("i", "<C-k>", "<Esc>d$i", opt) -- 没设置好，删除到行尾
+vim.keymap.set("i", "<C-d>", "<Del>", opt)    -- 删除光标后字符
+-- vim.keymap.set("i", "<C-k>", "<Esc>d$i", opt) -- 无效，删除到行尾
 vim.keymap.set("i", "<C-u>", "<Esc>d0i", opt) -- 删除到行首
 
-vim.keymap.set("i", "<C-z>", "<Esc>ui", opt) -- 撤销
+vim.keymap.set("i", "<C-z>", "<Esc>ui", opt)  -- 撤销
 -----------------------------------------------------------------------------
 --- go 语言相关---
 -----------------------------------------------------------------------------

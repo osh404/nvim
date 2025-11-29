@@ -2,11 +2,14 @@
 if vim.g.vscode then
   -- VSCode 环境下配置
   require("config.vscode").setup()
-  -- 禁用一些在 VS Code 中不需要的插件
-  vim.g.lazyvim_plugins = {
-    -- 在这里列出要禁用的插件
-  }
+  require("config.lazy")
 else
   -- LazyVim 配置
   require("config.lazy")
+  require("config.options")
+  require("config.keymaps")
+  --  主题应用
+  vim.cmd.colorscheme("dracula") -- 应用主题
+  -- vim.cmd.colorscheme("dracula-soft")
+  -- vim.cmd.colorscheme("tokyonight-night") -- 应用主题
 end

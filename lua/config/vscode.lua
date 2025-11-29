@@ -36,18 +36,11 @@ function M.setup()
   -- <C-b> <C-f> <C-u> <C-k>
 
   -- ========== 文件和工作区操作 (spc f) ==========
-  -- 文件搜索
-  -- map("n", "<leader>ff", "<cmd>call VSCodeNotify('workbench.action.quickOpen')<cr>", { desc = "Find files" })
-  -- map("n", "<leader>fg", "<cmd>call VSCodeNotify('workbench.action.findInFiles')<cr>", { desc = "Find in files" })
-  -- 文件搜索 (类似 fzf 的文件查找)
+  -- 最近使用文件
   map("n", "<leader>ff", "<cmd>call VSCodeNotify('workbench.action.quickOpen')<cr>", {
-    desc = "Fuzzy find files (fzf-like)",
+    desc = "Open files",
   })
-  -- 在文件中搜索内容
-  map("n", "<leader>fg", "<cmd>call VSCodeNotify('workbench.action.findInFiles')<cr>", {
-    desc = "Fuzzy find in files (rg-like)",
-  })
-  -- 使用选择的内容进行搜索
+  -- 在文件中搜索内容(也可以先选择内容在进行搜索)
   map("v", "<leader>fg", "<cmd>call VSCodeNotify('workbench.action.findInFiles')<cr>", {
     desc = "Find selected text in files",
   })
@@ -55,23 +48,9 @@ function M.setup()
   map("n", "<leader>fc", "<cmd>call VSCodeNotify('workbench.action.showCommands')<cr>", {
     desc = "Fuzzy find commands",
   })
-  -- 最近文件
-  map("n", "<leader>fr", "<cmd>call VSCodeNotify('workbench.action.openRecent')<cr>", {
-    desc = "Fuzzy find recent files",
-  })
   -- 设置搜索
   map("n", "<leader>fC", "<cmd>call VSCodeNotify('workbench.action.openSettings')<cr>", {
     desc = "Fuzzy find settings",
-  })
-
-  --========== 符号搜索 (spc s) ==========
-  -- 符号搜索 (函数、类等)
-  map("n", "<leader>ss", "<cmd>call VSCodeNotify('workbench.action.gotoSymbol')<cr>", {
-    desc = "Fuzzy find symbols",
-  })
-  -- 工作区符号搜索
-  map("n", "<leader>sS", "<cmd>call VSCodeNotify('workbench.action.showAllSymbols')<cr>", {
-    desc = "Fuzzy find symbols in workspace",
   })
 
   -- ========== 缓冲区管理 (spc b) ==========
@@ -114,16 +93,39 @@ function M.setup()
   map("n", "<C-l>", "<cmd>call VSCodeNotify('workbench.action.navigateRight')<cr>", { desc = "Navigate right" })
 
   -- ========== 代码导航和理解 (spc c) ==========
+  -- 代码导航
+  -- 定义
   map("n", "gd", "<cmd>call VSCodeNotify('editor.action.revealDefinition')<cr>", { desc = "Go to definition" })
-  map("n", "gD", "<cmd>call VSCodeNotify('editor.action.goToImplementation')<cr>", { desc = "Go to implementation" })
+  -- 声明
+  map("n", "gD", "<cmd>call VSCodeNotify('editor.action.revealDeclaration')<cr>", { desc = "Go to declaration" })
+  -- map("n", "gD", function()
+  --   vim.api.nvim_command("call VSCodeNotify('editor.action.revealDeclaration')")
+  -- end, { desc = "Go to declaration" })
+  -- 实现
+  map("n", "gI", "<cmd>call VSCodeNotify('editor.action.goToImplementation')<cr>", { desc = "Go to implementation" })
+  -- 引用
   map("n", "gr", "<cmd>call VSCodeNotify('editor.action.goToReferences')<cr>", { desc = "Find references" })
   map("n", "K", "<cmd>call VSCodeNotify('editor.action.showDefinitionPreviewHover')<cr>", { desc = "Hover" })
   map("n", "<leader>k", "<cmd>call VSCodeNotify('editor.action.showDefinitionPreviewHover')<cr>", { desc = "Hover" })
+  -- 代码跳转
+  -- <ctl-i> <ctl-o> <ctl - -> <ctl - shift->
 
-  -- 快速修复和重构
+  -- 修复和重构
   map("n", "<leader>ca", "<cmd>call VSCodeNotify('editor.action.quickFix')<cr>", { desc = "Code action" })
-  map("n", "<leader>cr", "<cmd>call VSCodeNotify('editor.action.rename')<cr>", { desc = "Rename" })
+  map("n", "<leader>cr", "<cmd>call VSCodeNotify('editor.action.rename')<cr>", { desc = "Rename symbol" })
   map("n", "<leader>cf", "<cmd>call VSCodeNotify('editor.action.formatDocument')<cr>", { desc = "Format document" })
+
+  -- 接口实现
+  map("n", "<leader>ci", "<cmd>call VSCodeNotify('go.impl.cursor')<cr>", {
+    desc = "Generate interface implementation",
+  })
+
+  -- 显示所有go命令操作
+  map("n", "<leader>cg", "<cmd>call VSCodeNotify('go.show.commands')<cr>", { desc = "Format document" })
+  -- 填充结构体json
+  map("n", "<leader>ct", "<cmd>call VSCodeNotify('go.add.tags')<cr>", {
+    desc = "Add struct tags",
+  })
 
   -- ========== 调试功能 (spc d)==========
   map(
@@ -168,10 +170,25 @@ function M.setup()
   -- 打开Claude code
   map("n", "<leader>tc", "<cmd>call VSCodeNotify('claude-vscode.editor.openLast')<cr>", { desc = "Clear terminal" })
 
-  -- ========== 搜索和替换 (spc s) ==========
-  map("n", "<leader>sw", "<cmd>call VSCodeNotify('workbench.action.findInFiles')<cr>", { desc = "Search word" })
+  -- ========== 搜索 (spc s) ==========
+  -- 当前文件下查找替换
   map("n", "<leader>sr", "<cmd>call VSCodeNotify('editor.action.startFindReplaceAction')<cr>", { desc = "Replace" })
-
+  -- 全路径搜索并替换
+  map("n", "<leader>sR", "<cmd>call VSCodeNotify('workbench.action.replaceInFiles')<cr>", {
+    desc = "Find and replace in files by path",
+  })
+  -- 符号搜索 (函数、类等)
+  map("n", "<leader>ss", "<cmd>call VSCodeNotify('workbench.action.gotoSymbol')<cr>", {
+    desc = "Fuzzy find symbols",
+  })
+  -- 工作区符号搜索
+  map("n", "<leader>sS", "<cmd>call VSCodeNotify('workbench.action.showAllSymbols')<cr>", {
+    desc = "Fuzzy find symbols in workspace",
+  })
+  -- 工作区搜索内容/代码片段
+  map("n", "<leader>sw", "<cmd>call VSCodeNotify('workbench.view.search')<cr>", {
+    desc = "find word",
+  })
   -- ========== 项目相关 （spc p）==========
   map(
     "n",
@@ -250,6 +267,24 @@ function M.setup()
   -- 退出 VS Code（完全退出）
   map("n", "<leader>qq", "<cmd>call VSCodeNotify('workbench.action.quit')<cr>", {
     desc = "Quit VS Code",
+  })
+
+  -- ========== Markdown 查看和编辑 ==========
+  -- 切换 Markdown 预览
+  map("n", "<leader>mp", "<cmd>call VSCodeNotify('markdown.showPreview')<cr>", {
+    desc = "Preview Markdown",
+  })
+  -- 在侧边打开预览
+  map("n", "<leader>ms", "<cmd>call VSCodeNotify('markdown.showPreviewToSide')<cr>", {
+    desc = "Preview Markdown to side",
+  })
+  -- 关闭预览
+  map("n", "<leader>mc", "<cmd>call VSCodeNotify('workbench.action.closeActiveEditor')<cr>", {
+    desc = "Close Markdown preview",
+  })
+  -- 刷新预览
+  map("n", "<leader>mr", "<cmd>call VSCodeNotify('markdown.preview.refresh')<cr>", {
+    desc = "Refresh Markdown preview",
   })
 
   --=========== 其他命令=============

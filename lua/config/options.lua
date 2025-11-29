@@ -22,7 +22,7 @@ vim.o.sidescrolloff = 8 -- 光标左右滚动时保留 8 列可见区域
 vim.wo.number = true -- 显示绝对行号
 vim.wo.relativenumber = true -- 显示相对行号
 vim.wo.cursorline = true -- 高亮当前行
--- vim.wo.signcolumn = "no" -- 显示左侧指示符符号列(设置为no，debug标点不出来)
+vim.wo.signcolumn = "yes" -- 显显示符号列（调试、LSP 必需），不要用 "no"
 
 ------------------------------------------------------------------------------
 -- 5. 折叠 (Folding)
