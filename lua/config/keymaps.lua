@@ -11,9 +11,9 @@ vim.keymap.set("i", "<C-p>", "<Up>", opt)   -- 移动到上一行
 -- vim.keymap.set("i", "<C-f>", "<Right>", opt) -- 右移
 -- 修改成延迟执行，避免键位冲突
 vim.defer_fn(function()
-  local opt = { noremap = true, silent = true }
-  vim.keymap.set("i", "<C-b>", "<Left>", opt)
-  vim.keymap.set("i", "<C-f>", "<Right>", opt)
+    local opt = { noremap = true, silent = true }
+    vim.keymap.set("i", "<C-b>", "<Left>", opt)
+    vim.keymap.set("i", "<C-f>", "<Right>", opt)
 end, 100) -- 延迟 100 毫秒执行
 
 
@@ -23,6 +23,10 @@ vim.keymap.set("i", "<C-d>", "<Del>", opt)    -- 删除光标后字符
 vim.keymap.set("i", "<C-u>", "<Esc>d0i", opt) -- 删除到行首
 
 vim.keymap.set("i", "<C-z>", "<Esc>ui", opt)  -- 撤销
+
+-- 单行或多行移动
+vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", opt)
+vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", opt)
 -----------------------------------------------------------------------------
 --- go 语言相关---
 -----------------------------------------------------------------------------
@@ -109,78 +113,78 @@ local map = vim.keymap.set
 -----------------------------------------------------------------------------
 -- ========== 基础调试控制 ==========
 map("n", "<leader>dc", function()
-  require("dap").continue()
+    require("dap").continue()
 end, { desc = "Debug: Start/Continue" })
 
 map("n", "<leader>dv", function()
-  require("dap").step_over()
+    require("dap").step_over()
 end, { desc = "Debug: Step over" })
 
 map("n", "<leader>di", function()
-  require("dap").step_into()
+    require("dap").step_into()
 end, { desc = "Debug: Step into" })
 
 map("n", "<leader>do", function()
-  require("dap").step_out()
+    require("dap").step_out()
 end, { desc = "Debug: Step out" })
 
 map("n", "<leader>db", function()
-  require("dap").toggle_breakpoint()
+    require("dap").toggle_breakpoint()
 end, { desc = "Debug: Toggle breakpoint" })
 
 map("n", "<leader>dB", function()
-  require("dap").set_breakpoint(vim.fn.input("Breakpoint condition: "))
+    require("dap").set_breakpoint(vim.fn.input("Breakpoint condition: "))
 end, { desc = "Debug: Conditional breakpoint" })
 
 map("n", "<leader>dl", function()
-  require("dap").set_breakpoint(nil, nil, vim.fn.input("Log point: "))
+    require("dap").set_breakpoint(nil, nil, vim.fn.input("Log point: "))
 end, { desc = "Debug: Log point" })
 
 map("n", "<leader>dr", function()
-  require("dap").repl.open()
+    require("dap").repl.open()
 end, { desc = "Debug: Open REPL" })
 
 map("n", "<leader>dt", function()
-  require("dap").terminate()
+    require("dap").terminate()
 end, { desc = "Debug: Terminate" })
 
 -- ========== 调试界面控制 ==========
 map("n", "<leader>du", function()
-  require("dapui").toggle()
+    require("dapui").toggle()
 end, { desc = "Debug: Toggle UI" })
 
 map("n", "<leader>de", function()
-  require("dapui").eval()
+    require("dapui").eval()
 end, { desc = "Debug: Evaluate expression" })
 
 -- ========== Go 专用调试 ==========
 map("n", "<leader>dgt", function()
-  if vim.bo.filetype == "go" then
-    require("dap-go").debug_test()
-  end
+    if vim.bo.filetype == "go" then
+        require("dap-go").debug_test()
+    end
 end, { desc = "Go: Debug test" })
 
 map("n", "<leader>dgl", function()
-  if vim.bo.filetype == "go" then
-    require("dap-go").debug_last()
-  end
+    if vim.bo.filetype == "go" then
+        require("dap-go").debug_last()
+    end
 end, { desc = "Go: Debug last test" })
 
 -- ========== 断点管理 ==========
 map("n", "<leader>dC", function()
-  require("dap").clear_breakpoints()
+    require("dap").clear_breakpoints()
 end, { desc = "Debug: Clear all breakpoints" })
 
 map("n", "<leader>dL", function()
-  require("dap").list_breakpoints()
+    require("dap").list_breakpoints()
 end, { desc = "Debug: List breakpoints" })
 -- 变量查看
 map("n", "<leader>dw", function()
-  local widgets = require("dap.ui.widgets")
-  widgets.centered_float(widgets.scopes)
+    local widgets = require("dap.ui.widgets")
+    widgets.centered_float(widgets.scopes)
 end, { desc = "Scopes Widget" })
 
 map("n", "<leader>dh", function()
-  local widgets = require("dap.ui.widgets")
-  widgets.hover()
+    local widgets = require("dap.ui.widgets")
+    widgets.hover()
 end, { desc = "Hover Variables" })
